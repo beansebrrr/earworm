@@ -1,0 +1,1 @@
+from .music_brainz import MusicBrainzAPI
