@@ -1,6 +1,6 @@
 from api import MusicBrainzAPI
 import tkinter as tk
-from ui import ListItem, ScrollList
+from ui import InfoFrame, ScrollList, SearchBar
 
 def main():
     api = MusicBrainzAPI()
@@ -8,19 +8,14 @@ def main():
     root.geometry("1280x720")
 
     scroll_list = ScrollList(root)
-    scroll_list.config(
-        width=300
-    )
+    search_bar = SearchBar(root, api, scroll_list)
+    info_frame = InfoFrame(root, api)
 
-    frame = tk.Frame(root, background="blue")
+    scroll_list.connect_to_info_frame(info_frame)
 
-    releases = api.search_releases("Still Still Stellar")
-
-    for release in releases:
-        ListItem(scroll_list.interior, release).pack(anchor="nw", fill="x")
-
+    search_bar.pack(side="top", fill="x")
     scroll_list.pack(fill="y", side="left")
-    frame.pack(expand=True, fill="both", side="left")
+    info_frame.pack(expand=True, fill="both", side="left")
 
     root.mainloop()    
 

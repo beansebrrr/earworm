@@ -1,4 +1,5 @@
 import tkinter as tk
+from .list_item import ListItem
 
 class ScrollList(tk.Frame):
     """Scrollable frame"""
@@ -19,6 +20,7 @@ class ScrollList(tk.Frame):
         canvas.yview_moveto(0)
 
         self.interior = interior = tk.Frame(canvas)
+        self.interior.configure(width=300)
         interior_id = canvas.create_window(
             0, 0, window=interior,
             anchor="nw"
@@ -40,3 +42,16 @@ class ScrollList(tk.Frame):
                 # Update the inner frame's width to fill the canvas.
                 canvas.itemconfigure(interior_id, width=canvas.winfo_width())
         canvas.bind('<Configure>', _configure_canvas)
+
+    def connect_to_info_frame(self, frame):
+        self.__info_frame = frame
+
+    def clear(self):
+        for widget in self.interior.winfo_children():
+            widget.destroy()
+
+    def populate(self, elements=[]):
+        self.clear()
+        for element in elements:
+            ListItem(self.interior, element, info_frame=self.__info_frame).pack(anchor="nw", fill="x")
+            

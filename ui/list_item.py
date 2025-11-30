@@ -1,23 +1,27 @@
 import tkinter as tk
 
 class ListItem(tk.Frame):
-    def __init__(self, parent, release):
+    def __init__(self, parent, release, info_frame):
         super().__init__(parent)
-        self.config(
-            padx=4, pady=8
-        )
+        self.config(padx=4, pady=8)
 
-        self.release_title = tk.Label(
-            self, text=release["title"],
-            font=("TkDefaultFont", 12, "bold")
-        ) 
-        self.release_artists = tk.Label(self, text=", ".join(release["artists"]))
+        self.release_title = tk.Label(self, text=release["title"],
+                                      font=("TkDefaultFont", 12, "bold"),
+                                      wraplength=300,
+                                      justify="left") 
+        self.release_artists = tk.Label(self, wraplength=300, justify="left", text=", ".join(release["artists"]))
         self.release_date = tk.Label(self, text=release["release_date"])
-        self.release_id = tk.Label(self, text=release["id"])
-        self.view_button = tk.Button(self, text="View")
+        self.release_id = tk.Label(self, text=release["id"], font=("tkDefaultFont", 8))
+        self.view_button = tk.Button(self, text="View", font=("tkDefaultFont", 10), command=self.view_info)
+
+        self.__info_frame = info_frame
+        self.__id = release["id"]
 
         self.release_title.pack(anchor="nw")
         self.release_artists.pack(anchor="nw")
         self.release_date.pack(anchor="nw")
-        self.release_id.pack(anchor="nw")
-        self.view_button.place(relx=1, rely=0, anchor="ne")
+        self.release_id.pack(anchor="sw")
+        self.view_button.pack(anchor="sw")
+
+    def view_info(self):
+        self.__info_frame.fill_info(self.__id)
