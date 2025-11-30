@@ -16,7 +16,18 @@ class MusicBrainzAPI:
     
     def lookup_release(self, release_mbid):
         output = self._lookup(release_mbid, "release")
-        return output
+        release = self._parse_release(output)
+        try:
+            release["recordings"] = [
+                {
+                    "title" : track["title"],
+                    "length" : track["length"]
+                }
+                for track in output["media"][0]["tracks"]
+            ]
+        except BaseException:
+            pass
+        return release
 
 
     def get_cover_art_data(self, release_mbid):
@@ -41,7 +52,7 @@ class MusicBrainzAPI:
     
 
     def _lookup(self, mbid, type):
-        url= f"{self.__root_url}/{type}/{mbid}?inc=media&fmt=json"
+        url= f"{self.__root_url}/{type}/{mbid}?inc=recordings+artist-credits&fmt=json"
         response = rget(url).json()
         return response
 
