@@ -1,5 +1,4 @@
 from .helper import locate_file, milliseconds_to_time
-import json
 from PIL import Image, ImageTk
 from ._scrollable_frame import ScrollableFrame
 import tkinter as tk
@@ -11,6 +10,7 @@ class InfoFrame(ScrollableFrame):
         self.__api = api
         self.interior.columnconfigure(0, minsize=256)
         self.interior.columnconfigure(1, weight=1)
+        self.interior.configure(padx=8, pady=8)
 
 
     def fill_info(self, id):
@@ -19,9 +19,7 @@ class InfoFrame(ScrollableFrame):
         self.clear()
 
         release_info = self.__api.lookup_release(id)
-        release_summary = tk.Frame(self.interior, background="blue")
-
-        print(json.dumps(release_info, indent=2))
+        release_summary = tk.Frame(self.interior, padx=12)
 
         duration = sum([track["length"] 
                         if track["length"] != None else 0
@@ -41,17 +39,25 @@ class InfoFrame(ScrollableFrame):
                                  text=", ".join(release_info["artists"]),
                                  font=("tkDefaultFont", 14),
                                  wraplength=500)
-        
+        track_count_label = tk.Label(release_summary,
+                                     justify="left", anchor="nw",
+                                     text=f"{len(release_info["tracks"])} tracks")
         duration_label = tk.Label(release_summary,
                                   justify="left", anchor="nw",
                                   text=duration)
         
+        
+        track_list = TrackList(self.interior, release_info["tracks"])
+        
         title_label.pack(fill="x")
         artists_label.pack(fill="x")
+        tk.Frame(release_summary, height=24).pack()
+        track_count_label.pack(fill="x")
         duration_label.pack(fill="x")
 
         image_widget.grid(column=0, row=0, sticky="nsew")
         release_summary.grid(column=1, row=0, sticky="nsew")
+        track_list.grid(column=0, row=1, columnspan=2, sticky="nsew")
     
 
 class AlbumCoverImage(tk.Label):
@@ -66,4 +72,36 @@ class AlbumCoverImage(tk.Label):
         self.image.thumbnail((256, 256))
         self.tk_image = ImageTk.PhotoImage(self.image)
         self.config(image=self.tk_image)
-    
+
+
+class TrackList(tk.Frame):
+    def __init__(self, parent, tracks):
+        super().__init__(parent)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, minsize=300)
+        self.config(pady=24)
+
+        tk.Label(self, text="#",
+                 font=("tkDefaultFont", 12, "bold"),
+                 anchor="nw", justify="left"
+                 ).grid(column=0, row=0, sticky="nsew")
+        tk.Label(self, text="Title",
+                 font=("tkDefaultFont", 12, "bold"),
+                 anchor="nw", justify="left"
+                 ).grid(column=1, row=0, sticky="nsew")
+        tk.Label(self, text="Duration",
+                 font=("tkDefaultFont", 12, "bold"),
+                 anchor="nw", justify="left"
+                 ).grid(column=2, row=0, sticky="nsew")
+
+        for i, track in enumerate(tracks):
+            tk.Label(self, text=str(i+1),
+                     anchor="nw", justify="left"
+                     ).grid(column=0, row=i+1, sticky="nsew")
+            tk.Label(self, text=track["title"],
+                     anchor="nw", justify="left"
+                     ).grid(column=1, row=i+1, sticky="nsew")
+            tk.Label(self, text=milliseconds_to_time(track["length"]),
+                     anchor="nw", justify="left"
+                     ).grid(column=2, row=i+1, sticky="nsew")
+

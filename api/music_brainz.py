@@ -34,8 +34,7 @@ class MusicBrainzAPI:
             url = f"https://coverartarchive.org/release/{release_mbid}"
             response = rget(url)
             response.raise_for_status()
-            try: response = response.json()["images"][0]
-            except: raise BaseException("Can't retrieve image")
+            response = response.json()["images"][0]
             img_url = response["image"]
             img_response = rget(img_url)
             img_data = BytesIO(img_response.content)

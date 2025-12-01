@@ -1,4 +1,5 @@
 def milliseconds_to_time(milliseconds: int) -> str:
+    milliseconds = milliseconds or 0
     seconds = milliseconds / 1000
     minutes = seconds // 60
     seconds = seconds % 60

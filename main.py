@@ -20,7 +20,7 @@ def main():
     scroll_list.grid(column=0, row=1, sticky="nsew")
     info_frame.grid(column=1, row=1, sticky="nsew")
 
-    root.mainloop()    
+    root.mainloop()
 
 
 if __name__ == "__main__":

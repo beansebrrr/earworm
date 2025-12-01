@@ -3,7 +3,6 @@ import tkinter as tk
 class SearchBar(tk.Frame):
     def __init__(self, parent, api, scroll_list):
         super().__init__(parent)
-        self.config(padx=4, pady=12)
 
         self.__api = api
         self.__list_element = scroll_list
