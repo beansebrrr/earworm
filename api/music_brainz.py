@@ -1,5 +1,4 @@
 from io import BytesIO
-from PIL import Image
 from requests import get as rget
 
 class MusicBrainzAPI:
@@ -18,7 +17,7 @@ class MusicBrainzAPI:
         output = self._lookup(release_mbid, "release")
         release = self._parse_release(output)
         try:
-            release["recordings"] = [
+            release["tracks"] = [
                 {
                     "title" : track["title"],
                     "length" : track["length"]
@@ -41,7 +40,7 @@ class MusicBrainzAPI:
             img_response = rget(img_url)
             img_data = BytesIO(img_response.content)
             return img_data
-        except:
+        except BaseException:
             return None
 
 
