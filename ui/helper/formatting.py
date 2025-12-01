@@ -1,4 +1,7 @@
 def milliseconds_to_time(milliseconds: int) -> str:
+    """Converts a number of milliseconds (Default format in musicbrainz)
+    into a more readable string."""
+
     milliseconds = milliseconds or 0
     seconds = milliseconds / 1000
     minutes = seconds // 60

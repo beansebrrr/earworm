@@ -1,7 +1,12 @@
 import tkinter as tk
 
+#
+
 class ScrollableFrame(tk.Frame):
-    """Scrollable frame"""
+    """
+    Scrollable frame
+    Source: https://stackoverflow.com/a/16198198
+    """
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -30,7 +35,7 @@ class ScrollableFrame(tk.Frame):
             also updating the scrollbar."""
             # Update the scrollbars to match the size of the inner frame.
             size = (interior.winfo_reqwidth(), interior.winfo_reqheight())
-            canvas.config(scrollregion="0 0 %s %s" % size) # type: ignore
+            canvas.config(scrollregion=f"0 0 {" ".join([str(s) for s in size])}") # type: ignore
             if interior.winfo_reqwidth() != canvas.winfo_width():
                 # Update the canvas's width to fit the inner frame.
                 canvas.config(width=interior.winfo_reqwidth())
