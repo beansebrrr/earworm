@@ -49,11 +49,8 @@ If you prefer the usual method, A `requirements.txt` is provided. Just follow th
     # MacOS and Linux
     source .venv/bin/activate
 
-    # Windows PowerShell
-    .\.venv\Scripts\activate.ps1
-
-    # Windows Command Prompt
-    .\.venv\Scripts\activate.bat
+    # Windows
+    .\.venv\Scripts\activate
     ```
 
 5. Install the dependencies from `requirements.txt` by running this command:
